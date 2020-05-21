@@ -1,0 +1,23 @@
+{
+  "name": "chronicler-ui",
+  "version": "1.0.0",
+  "description": "Host UI for chronicler",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rychan14/chronicler-ui.git"
+  },
+  "author": "Ryan Chan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rychan14/chronicler-ui/issues"
+  },
+  "homepage": "https://github.com/rychan14/chronicler-ui#readme",
+  "devDependencies": {
+    "webpack": "^5.0.0-beta.16",
+    "webpack-cli": "^3.3.11"
+  }
+}
