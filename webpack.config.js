@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')
-const { DefinePlugin } = require('webpack')
+const { DefinePlugin, ContextReplacementPlugin } = require('webpack')
+const locales = ['en-US', 'de', 'pl', 'it']
 
 module.exports = (env = {}) => ({
   mode: env.prod ? 'production' : 'development',
@@ -32,7 +33,8 @@ module.exports = (env = {}) => ({
     inline: true,
     overlay: true,
     stats: 'minimal',
-    contentBase: path.join(__dirname, 'dist')
+    contentBase: path.join(__dirname, 'dist'),
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -55,18 +57,29 @@ module.exports = (env = {}) => ({
           'css-loader',
           'stylus-loader'
         ]
+      },
+      {
+        test: /\.(ttf)$/,
+        use: {
+          loader: 'url-loader'
+        }
       }
     ]
   },
   plugins: [
+    new ContextReplacementPlugin(
+      /date\-fns[\/\\]/,
+      new RegExp(`[/\\\\\](${locales.join('|')})[/\\\\\]index\.js$`)
+    ),
     new ModuleFederationPlugin({
       name: 'chronicler',
+      library: { type: 'var', name: 'chronicler' },
       remotes: {
         pensieve: 'pensieve'
       },
-      exposes: {
-        AppContainer: './src/App.vue'
-      },
+      // exposes: {
+      //   AppContainer: './src/App.vue'
+      // },
       shared: ['vue']
     }),
     new HtmlWebpackPlugin({

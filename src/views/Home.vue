@@ -1,16 +1,14 @@
-<template>
+<template lang='jade'>
   <div>
-    home
+    Chronicler Home
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      message: 'Hello World'
-    }
-  }
+  // components: {
+  //   AppContainer: () => import('pensieve/AppContainer')
+  // },
 }
 </script>
 

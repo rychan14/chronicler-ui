@@ -7,6 +7,15 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  {
+    path: '/pensieve',
+    name: 'Pensieve',
+    component: () => import('pensieve/AppContainer')
+  },
+  {
+    path: '/*',
+    component: Home
+  }
   // {
   //   path: '/about',
   //   name: 'About',
