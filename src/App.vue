@@ -1,34 +1,21 @@
 <template>
   <div
-    id="app"
+    id="chronicler"
     :style="cssVars"
   >
     <div class="app-grid">
       <div class="content">
-        <div class="top" />
-        <div class="menu" />
-        <div class="main">
-          <div class="calendar">
-            <div>
-              &lt;
-            </div>
-            <div class="month">
-              {{ calendar.month }}
-            </div>
-            <div>
-              &gt;
-            </div>
-            <div class="days-grid">
-              <div
-                v-for="day in calendar.days"
-                :key="day"
-                class="day"
-                :class="{ active: day === calendar.day }"
-              >
-                {{ day }}
-              </div>
-            </div>
+        <div class="top">
+          Chronicler
+        </div>
+        <div class="menu">
+          <div />
+          <div class="live-date">
+            {{ liveDate }}
           </div>
+        </div>
+        <div class="main">
+          <Pensieve />
         </div>
       </div>
       <div class="sidebar" />
@@ -37,8 +24,9 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import regression from 'regression'
-import { getDate, getDaysInMonth, getMonth } from 'date-fns'
+import { format, getDate, getDaysInMonth, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 const horizontalSpacingRes = regression.polynomial([[360, 10], [768, 20], [1024, 25], [1280, 30]], { order: 3 })
 const verticalSpacingRes = regression.polynomial([[360, 10], [768, 20]], { order: 3 })
@@ -47,11 +35,22 @@ const headingText1Res = regression.polynomial([[360, 18], [768, 20], [1024, 22],
 
 export default {
   name: 'App',
+  components: {
+    Pensieve: defineAsyncComponent(() => import('pensieve/AppContainer'))
+  },
   data () {
+    const date = new Date()
+    const liveDate = format(Date.now(), 'dd MMM yyyy hh:mm').toUpperCase()
+    const updateTime = () => {
+      this.liveDate = format(Date.now(), 'dd MMM yyyy hh:mm').toUpperCase()
+      window.requestAnimationFrame(updateTime)
+    }
+    window.requestAnimationFrame(updateTime)
     return {
       width: window.innerWidth,
-      today: new Date(),
-      activeDate: new Date()
+      today: date,
+      activeDate: date,
+      liveDate
     }
   },
   computed: {
@@ -152,13 +151,15 @@ export default {
 :root
   // --base #293241
   --base #fefdfa
+  --base-text #293241
   --primary-color #e29578
   --secondary-color #ffddd2
   --tertiary-color #FAEADE
   --quaternary-color #FDF7F2
   --quinary-color #ee6c4d
 
-#app
+#chronicler
+  color var(--base-text)
   font-size var(--text1)
   font-family 'Rubik', sans-serif
   font-weight 300
@@ -182,26 +183,23 @@ export default {
   grid-template-rows 100px 60px auto
 
 .top
+  align-items center
   background-color var(--quaternary-color)
+  display flex
+  font-size var(--heading1)
+  padding var(--hspacing)
 
 .menu
+  align-items center
   background-color var(--tertiary-color)
+  display flex
+  padding var(--hspacing)
+  justify-content space-between
 
 .main
   background-color var(--secondary-color)
-
-.calendar
-  display inline-grid
-  text-align center
-
-.month
-  font-size 17px
-  margin-bottom 4px
-
-.days-grid
   display grid
-  font-size 15px
-  grid-template-columns repeat(7, 20px)
+  grid-template-columns 80% 20%
 
 .sidebar
   background-color var(--primary-color)

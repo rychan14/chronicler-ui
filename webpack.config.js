@@ -14,7 +14,7 @@ module.exports = (env = {}) => ({
     main: './src/index'
   },
   output: {
-    publicPath: 'http://localhost:8081/'
+    publicPath: 'http://localhost:7000/'
     // path: path.resolve(__dirname, 'dist'),
     // filename: '[name].[hash].js'
   },
@@ -28,7 +28,7 @@ module.exports = (env = {}) => ({
   },
   devServer: {
     open: true,
-    port: 8081,
+    port: 7000,
     // hot: true,
     inline: true,
     overlay: true,
